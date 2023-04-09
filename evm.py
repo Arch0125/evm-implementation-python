@@ -34,7 +34,9 @@ class EVM:
         return False
     
     def op_sub(self, bytecode):
-        self.stack.append((self.stack.pop() - self.stack.pop()) % 2**256)
+        n1 = self.stack.pop()
+        n2 = self.stack.pop()
+        self.stack.append((n2 - n1) % 2**256)
         return False
     
     def op_div(self, bytecode):
@@ -43,7 +45,7 @@ class EVM:
         if n2 == 0:
             self.stack.append(0)
         else:
-            self.stack.append((n1 // n2) % 2**256)
+            self.stack.append((n2 // n1) % 2**256)
         return False
 
     def op_push1(self, bytecode):
@@ -78,7 +80,7 @@ if __name__ == "__main__":
     initial_gas = 1000
     evm = EVM(initial_gas)
     bytecode = bytearray(
-       [0x60, 0x05, 0x60, 0x05, 0x04, 0x00]
+       [0x60, 0x05, 0x60, 0x05, 0x02, 0x00]
     )
     evm.execute(bytecode)
     print(evm.stack)
